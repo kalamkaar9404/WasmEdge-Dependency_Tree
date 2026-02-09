@@ -76,6 +76,7 @@ int main() {
     return 0;
 }
 ```
+![Results](res.png)
 ##  Technical Implementation
 
 The implementation works by maintaining a Directed Acyclic Graph (DAG) of module dependencies. The lifecycle is managed in five phases:
