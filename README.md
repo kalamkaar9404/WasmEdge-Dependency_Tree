@@ -23,7 +23,59 @@ The solution introduces two modes of deletion:
 2.  **Cascading Mode:** Automatically identifies and removes the entire tree of dependent modules in a safe, bottom-up order.
 
 ---
+## 🚀 Running the Examples
 
+I have created a demonstration file `main.cpp` that simulates the Store environment to showcase the two deletion strategies.
+
+### 1. Code Example (`main.cpp`)
+
+This code demonstrates a "Diamond Dependency" scenario:
+* **Module A (Provider):** The base module.
+* **Module B (Consumer):** Imports Module A.
+* **Module C (Consumer):** Imports Module A.
+* **Module D (Top-Level):** Imports Module B.
+
+```cpp
+#include <iostream>
+#include "store_manager.h" // Hypothetical header for our modified store
+
+int main() {
+    StoreManager store;
+
+    // 1. Register Modules (Simulating the dependency graph)
+    // Graph: D -> B -> A <- C
+    auto idA = store.registerModule("Module_A", {});           // No imports
+    auto idB = store.registerModule("Module_B", {"Module_A"}); // Imports A
+    auto idC = store.registerModule("Module_C", {"Module_A"}); // Imports A
+    auto idD = store.registerModule("Module_D", {"Module_B"}); // Imports B
+
+    std::cout << "--- Scenario 1: Strict Deletion (Should Fail) ---\n";
+    // Try to delete Module A. It should fail because B and C depend on it.
+    auto result = store.removeModule(idA, false); // false = Strict Mode
+    if (result == ErrCode::ModuleInUse) {
+        std::cout << "[PASS] Strict Mode prevented unsafe deletion of Module A.\n";
+    } else {
+        std::cout << "[FAIL] Module A was deleted unsafely!\n";
+    }
+
+    std::cout << "\n--- Scenario 2: Cascading Deletion (Should Succeed) ---\n";
+    // Try to delete Module B. 
+    // Cascade should remove: Module D (dependent) -> Module B (target).
+    // Note: Module A remains untouched because B depended on A, not the other way around.
+    store.removeModule(idB, true); // true = Cascading Mode
+    
+    // Verify D is gone
+    if (!store.findModule(idD)) {
+        std::cout << "[PASS] Cascading deletion removed dependent Module D.\n";
+    }
+    // Verify B is gone
+    if (!store.findModule(idB)) {
+        std::cout << "[PASS] Cascading deletion removed target Module B.\n";
+    }
+
+    return 0;
+}
+```
 ##  Technical Implementation
 
 The implementation works by maintaining a Directed Acyclic Graph (DAG) of module dependencies. The lifecycle is managed in five phases:
