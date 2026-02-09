@@ -1,0 +1,3 @@
+/mnt/c/Users/abhi9/OneDrive/Desktop/wasmdep/build/CMakeFiles/dep_manager.dir
+/mnt/c/Users/abhi9/OneDrive/Desktop/wasmdep/build/CMakeFiles/edit_cache.dir
+/mnt/c/Users/abhi9/OneDrive/Desktop/wasmdep/build/CMakeFiles/rebuild_cache.dir

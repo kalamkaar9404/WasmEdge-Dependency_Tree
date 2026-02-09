@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/dep_manager.dir/src/main.cpp.o -o dep_manager  -Wl,-rpath,/home/abhi9/.wasmedge/lib -lwasmedge 
