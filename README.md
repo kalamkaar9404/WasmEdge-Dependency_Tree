@@ -37,7 +37,7 @@ This code demonstrates a "Diamond Dependency" scenario:
 
 ```cpp
 #include <iostream>
-#include "store_manager.h" // Hypothetical header for our modified store
+#include "store_manager.h"
 
 int main() {
     StoreManager store;
@@ -49,16 +49,14 @@ int main() {
     auto idC = store.registerModule("Module_C", {"Module_A"}); // Imports A
     auto idD = store.registerModule("Module_D", {"Module_B"}); // Imports B
 
-    std::cout << "--- Scenario 1: Strict Deletion (Should Fail) ---\n";
     // Try to delete Module A. It should fail because B and C depend on it.
     auto result = store.removeModule(idA, false); // false = Strict Mode
     if (result == ErrCode::ModuleInUse) {
-        std::cout << "[PASS] Strict Mode prevented unsafe deletion of Module A.\n";
+        std::cout << "Strict Mode prevented unsafe deletion of Module A.\n";
     } else {
-        std::cout << "[FAIL] Module A was deleted unsafely!\n";
+        std::cout << "Fail\n";
     }
 
-    std::cout << "\n--- Scenario 2: Cascading Deletion (Should Succeed) ---\n";
     // Try to delete Module B. 
     // Cascade should remove: Module D (dependent) -> Module B (target).
     // Note: Module A remains untouched because B depended on A, not the other way around.
@@ -66,11 +64,11 @@ int main() {
     
     // Verify D is gone
     if (!store.findModule(idD)) {
-        std::cout << "[PASS] Cascading deletion removed dependent Module D.\n";
+        std::cout << "removed dependent Module D.\n";
     }
     // Verify B is gone
     if (!store.findModule(idB)) {
-        std::cout << "[PASS] Cascading deletion removed target Module B.\n";
+        std::cout << " removed target Module B.\n";
     }
 
     return 0;
