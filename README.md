@@ -108,12 +108,4 @@ Finally, `unlinkModules` removes the edges from the graph, and `Modules.erase` f
 ### Prerequisites
 - C++ Compiler (GCC/Clang) supporting C++17 or later
 - CMake 3.12+
-- WasmEdge dependencies (LLVM, etc.)
-
-### Build Instructions
-```bash
-git clone [https://github.com/](https://github.com/)[YOUR_USERNAME]/WasmEdge.git
-cd WasmEdge
-mkdir build && cd build
-cmake -DCMAKE_BUILD_TYPE=Debug ..
-make -j$(nproc)
+- WasmEdge dependencies (LLVM)
